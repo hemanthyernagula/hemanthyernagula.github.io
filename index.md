@@ -6,4 +6,4 @@ layout: page
 title: Home
 ---
 
-# Thank you for showing interest, My Portfolio is still under work, please visite after few days
+# Thank you for showing interest, My Portfolio is still under work, please visit after few days
