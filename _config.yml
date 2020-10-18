@@ -20,6 +20,9 @@
 
 title: Hemanth Yernagula
 email: yernagulahemanth.com
+author: 
+  name: Hemanth
+  email: yernagulahemanth@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Capable of delivering machine learning end to end solutions and 
   can deploy ml model using flask. I have worked on NLP problems 
