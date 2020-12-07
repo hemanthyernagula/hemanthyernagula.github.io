@@ -24,9 +24,6 @@ data = pd.DataFrame({'Outlook':('Sunny','Sunny','Overcast','Rain','Rain','Rain',
 data
 ```
 
-
-
-
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -173,5 +170,21 @@ data
 
 # Entropy
 
-$$ E(X) =  -\sum_{i=1}^{K} P(x_i){\log_b}(P(x_i))  $$
-                where K is number of classes
+## Formula:
+ $$ E(X) =  -\sum_{i=1}^{K} P(x_i){\log_b}(P(x_i))  $$
+               ---- where K is number of classes
+
+```python
+data.Target.value_counts()
+```
+
+
+
+
+    Yes    9
+    No     5
+    Name: Target, dtype: int64
+
+
+
+`So when we substitue in Entropy formula`
