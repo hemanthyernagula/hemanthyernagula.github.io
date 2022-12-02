@@ -4,7 +4,7 @@ title: Activation Functions
 categories: article
 permalink: /:categories/:title
 tags: [DeepLearning, Activation Functions]
-progress: True
+progress: False
 image: '/assets/images/RNN_example.svg'
 ---
 
