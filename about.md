@@ -12,5 +12,5 @@ like movie tag prediction, I have hands-on experience working on
 logistic regression, linear regression and SVM.
 
 I'm also able make beautiful and attractive front end web designing 
-with Seantic Ui,Bootstrap and Css
+with Seantic Ui,Bootstrap and Css....
 
