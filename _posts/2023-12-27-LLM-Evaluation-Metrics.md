@@ -1,25 +1,29 @@
 ---
 layout: post
-title: LLM Evaluation Metrics
+title: Decoding LLM Metrics - A Mathematical Dive into Model Evaluation  🧮📊
 categories: article
 permalink: /:categories/:title
 tags: [GenAI, LLM, Evaluation Metrics]
 ---
 
->Finding out best model is always a crusial task, because just because of using wrong/improper evaluation metric we may sometimes end up with missing out best model that is performing out there!
+>Finding out best model is always a crucialtask, because just because of using wrong/improper evaluation metric we may sometimes end up with missing out best model that is performing out there!
 
 
-# Why do we need evaluation metric
+<!-- # Why do we need evaluation metric
 - To choose best model.
 - Improve the performance of model.
-- Keep track of the model when there is variance at inferance time.
+- Keep track of the model when there is variance at inference time. -->
+
+
+## Why do we need evaluation metric?
+
+An evaluation metric is a way to measure the quality or performance of a language model. It helps us to compare different models and choose the best one for our task. It also helps us to improve the model by identifying its strengths and weaknesses. Finally, it helps us to monitor the model when it is deployed and detect any changes or errors in its output.
 
 There are many types of performance metrics, few of them are as mentioned below
-- Manual Evaluation
-- Perplixity
-- Rouge
-- Bleu
-- Diversity
+- Manual Evaluation 🧠✨
+- Bleu (📈⬆️ Higher is better)
+- Rouge (📈⬆️ Higher is better)
+- Perplexity (📉⬇️ Lower is better)
 
 <!-- 
 {% highlight python %}
@@ -29,7 +33,7 @@ import torch
 {% endhighlight %} -->
 
 
-## Manual Evaluation(Human Evaluation):
+## Manual Evaluation (Human Evaluation):
 - Manual evaluation can provide valuable and subjective feedback on the LLM’s performance. 
 - Hiring human evaluators who are domain experts and providing clear guidelines to get best model is one way to evaluate the models.
 - But it can also be time-consuming, expensive, and prone to bias.
@@ -68,6 +72,109 @@ Where:
 - $$c$$ is the length of the generated translation.
 - $$r$$ is the effective ground truth length. This is usually the length of the ground truth translation that is closest in length to the candidate translation.
 
+### Explanation:
+
+   let's consider an example to understand the best case and worst case scenarios for bigram precision ($$p_n$$) in the context of BLEU score calculation.
+
+  Let's say we have the following candidate translation and reference translation:
+
+  - Candidate Translation (C): "The cat sat on the mat"
+  - Reference Translation (R): "The cat is sitting on the mat"
+
+  We first need to generate the bigrams for both the candidate and reference translations:
+
+  - Bigrams in C: {"The cat", "cat sat", "sat on", "on the mat"}
+  - Bigrams in R: {"The cat", "cat is", "is sitting", "sitting on", "on the mat"}
+
+  Now, let's calculate the bigram precision ($$p_n$$):
+
+  - Count of bigrams in C that are present in R: 2 ("The cat", "on the mat")
+  - Total count of bigrams in C: 4
+
+  So, $$p_n$$ = 2/4 = 0.5
+
+<table>
+  <thead>
+    <tr>
+      <th>Reference Text</th>
+      <th>Model Prediction</th>
+      <th>pn</th>
+      <th>wn</th>
+      <th>exp()</th>
+      <th>BLEU Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>The cat is on the mat.</td>
+      <td>The cat is on the mat.</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>The cat is on the mat.</td>
+      <td>There is a cat on the mat.</td>
+      <td>0.83</td>
+      <td>0.86</td>
+      <td>0.84</td>
+      <td>0.78</td>
+    </tr>
+    <tr>
+      <td>The cat is on the mat.</td>
+      <td>A cat is sitting on a mat.</td>
+      <td>0.5</td>
+      <td>0.86</td>
+      <td>0.65</td>
+      <td>0.47</td>
+    </tr>
+    <tr>
+      <td>The cat is on the mat.</td>
+      <td>On the mat is a cat.</td>
+      <td>0.25</td>
+      <td>0.86</td>
+      <td>0.46</td>
+      <td>0.17</td>
+    </tr>
+    <tr>
+      <td>The cat is on the mat.</td>
+      <td>The dog is under the table.</td>
+      <td>0</td>
+      <td>0.86</td>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Reference Text</th>
+      <th>Model Prediction</th>
+      <th>pn</th>
+      <th>wn</th>
+      <th>exp()</th>
+      <th>BLEU Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>The cat is on the mat.</td>
+      <td>News paper in front of my door.</td>
+      <td>0</td>
+      <td>0.86</td>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## Rouge Score
 ROUGE score measures the overlap of n-grams, words, or sentences between the machine output and the reference. There are different types of ROUGE scores, such as ROUGE-N, ROUGE-L, and ROUGE-S, that use different levels of granularity to compare the texts. Here are the formulas for each type of ROUGE score:
@@ -85,6 +192,7 @@ ROUGE score measures the overlap of n-grams, words, or sentences between the mac
     - $$\text{Count}_{\text{match}}(\text{n-gram})$$ is the maximum number of times the n-gram appears in both the machine output and the reference summary.
     - $$\text{Count}(\text{n-gram})$$ is the number of times the n-gram appears in the reference summary.
 
+
 2. ROUGE-L: This type of ROUGE score measures the longest common subsequence (LCS) of words between the machine output and the reference. The LCS is the longest sequence of words that appears in the same order in both texts. The formula for ROUGE-L is as follows¹²:
 
     $$
@@ -96,6 +204,7 @@ ROUGE score measures the overlap of n-grams, words, or sentences between the mac
     - $$s$$ is a reference summary.
     - $$\text{LCS}(\text{Machine Output}, s)$$ is the length of the longest common subsequence of words between the machine output and the reference summary.
     - $$\text{Length}(s)$$ is the number of words in the reference summary.
+
 
 3. ROUGE-S: This type of ROUGE score measures the overlap of skip-bigrams between the machine output and the reference. A skip-bigram is a pair of words that can be separated by any number of words in between. The formula for ROUGE-S is as follows¹²:
 
@@ -144,27 +253,66 @@ $$ is the conditional probability of the next word $$x_i$$ given the previous wo
 The perplexity of a language model can be interpreted as the weighted average branching factor of the language. The branching factor is the number of possible next words that can follow a given word or sequence of words. A lower perplexity means that the language model is more confident and accurate in predicting the next word, and thus the language has a lower branching factor. A higher perplexity means that the language model is more uncertain and inaccurate in predicting the next word, and thus the language has a higher branching factor.
 
 
+### Metric Comparison Table
 
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Purpose</th>
+      <th>Score Interpretation</th>
+      <th>Mathematical Formula</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Manual Evaluation</td>
+      <td>Subjective human feedback</td>
+      <td>Qualitative assessment</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>BLEU Score</td>
+      <td>Text translation evaluation</td>
+      <td>Proportional to model performance</td>
+      <td>$$BLEU = BP \cdot \exp\left(\sum_{n=1}^{N} w_n \log p_n\right)$$</td>
+    </tr>
+    <tr>
+      <td>Rouge Score</td>
+      <td>N-gram, word, sentence overlap</td>
+      <td>>Proportional to model performance</td>
+      <td>
+
+            $$
+            \text{ROUGE-S} = \frac{\sum_{s \in \text{References}} \sum_{\text{skip-bigram} \in s} \text{Count}_{\text{match}}(\text{skip-bigram})}{\sum_{s \in \text{References}} \sum_{\text{skip-bigram} \in s} \text{Count}(\text{skip-bigram})}
+            $$
+
+      </td>
+    </tr>
+    <tr>
+      <td>Perplexity</td>
+      <td>Language model performance</td>
+      <td>Lower is better</td>
+      <td>$$\text{Perplexity}(q) = 2^{-\frac{1}{N} \sum_{i=1}^N \log_2 q(x_i | x_1, ..., x_{i-1})}$$</td>
+    </tr>
+  </tbody>
+</table>
 
 
 ### Referances
-## BLEU
+##### BLEU
 (1) A Gentle Introduction to Calculating the BLEU Score for Text in Python. https://machinelearningmastery.com/calculate-bleu-score-for-text-python/.
 (2) NLP - BLEU Score for Evaluating Neural Machine Translation - GeeksforGeeks. https://www.geeksforgeeks.org/nlp-bleu-score-for-evaluating-neural-machine-translation-python/.
 (3) Understanding Bleu Score - OpenGenus IQ. https://iq.opengenus.org/bleu-score/.
 (4) Bleu Score in NLP - Scaler Topics. https://www.scaler.com/topics/nlp/bleu-score-in-nlp/.
-## Rouge
+##### Rouge
 (1) An intro to ROUGE, and how to use it to evaluate summaries. https://www.freecodecamp.org/news/what-is-rouge-and-how-it-works-for-evaluation-of-summaries-e059fb8ac840/.
 (2) Text Summarization:. How To Calculate Rouge Score - Medium. https://medium.com/mlearning-ai/text-summarization-84ada711c49c.
 (3) Understanding BLEU and ROUGE score for NLP evaluation. https://medium.com/@sthanikamsanthosh1994/understanding-bleu-and-rouge-score-for-nlp-evaluation-1ab334ecadcb.
 (4) Mastering ROUGE Matrix: Your Guide to Large Language Model Evaluation .... https://dev.to/aws-builders/mastering-rouge-matrix-your-guide-to-large-language-model-evaluation-for-summarization-with-examples-jjg.
 (5) Evaluate translation or summarization with ROUGE similarity score .... https://www.mathworks.com/help/textanalytics/ref/rougeevaluationscore.html.
 
-
-## Perplexity
-
+##### Perplexity
 (1) Perplexity - Wikipedia. https://en.wikipedia.org/wiki/Perplexity.
 (2) Two minutes NLP — Perplexity explained with simple probabilities. https://medium.com/nlplanet/two-minutes-nlp-perplexity-explained-with-simple-probabilities-6cdc46884584.
 (3) Perplexity: a more intuitive measure of uncertainty than entropy. https://mbernste.github.io/posts/perplexity/.
-`If you observe the W metrix has parameter called requires_grad, but previous w_ does not have`
-
